@@ -1,0 +1,43 @@
+stages:
+  - prepare
+  - build
+  - deploy
+
+image: node:latest
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - ./node_modules/
+
+install:
+  stage: prepare
+  tags:
+    - docker
+  script:
+    - yarn
+
+build:
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - yarn
+  script:
+    - export CI=
+    - ./node_modules/.bin/gatsby build
+
+  artifacts:
+    paths:
+      - ./public/
+
+deploy:
+  stage: deploy
+  dependencies:
+    - build
+  tags:
+    - docker
+  only:
+    - master
+  script:
+    - ./deploy.sh ./public/
