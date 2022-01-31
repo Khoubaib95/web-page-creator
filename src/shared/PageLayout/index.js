@@ -5,11 +5,10 @@
 // Packages
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { useStaticQuery, graphql } from 'gatsby';
+// import { useStaticQuery, graphql } from 'gatsby';
 
 // UI lib component
 import { Container } from 'react-grid-system';
-import Image from '../Image/index';
 // Local UI components
 // import PageHeader from '../PageHeader';
 
@@ -27,8 +26,8 @@ import './index.scss';
  */
 function PageLayout({ children }) {
   /* ********************************** HOOKS ********************************* */
-  /*
-  const data = useStaticQuery(graphql`
+
+  /* const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
         siteMetadata {

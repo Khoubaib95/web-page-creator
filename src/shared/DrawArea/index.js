@@ -25,8 +25,8 @@ function DrawArea({ elements, selectedElementIndex, setSelectedElementIndex }) {
                   setSelectedElementIndex(col.coordinates);
                 }}
                 className={`${
-                  col.coordinates.index === selectedElementIndex.index &&
-                  col.coordinates.rowNumber === selectedElementIndex.rowNumber
+                  col.coordinates.index === selectedElementIndex.index
+                  && col.coordinates.rowNumber === selectedElementIndex.rowNumber
                     ? 'selected'
                     : ''
                 } col`}

@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 
 // Packages
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'gatsby-plugin-react-i18next';
 import { graphql } from 'gatsby';
 
@@ -29,7 +29,7 @@ function IndexPage() {
     rowNumber: -1,
     index: -1,
   });
-  const [elements, SetElements] = useState([
+  const [elements, setElements] = useState([
     {
       rowLength: {
         xs: 0,
@@ -43,7 +43,6 @@ function IndexPage() {
             rowNumber: 0,
             index: 0,
           },
-          span: 0,
           offset: {
             xs: 0,
             sm: 0,
@@ -58,15 +57,13 @@ function IndexPage() {
           },
           element: {
             type: 'COL',
-            content: 'new col',
+            content: '',
           },
         },
       ],
     },
   ]);
-  useEffect(() => {
-    console.log(selectedElementIndex);
-  }, [selectedElementIndex]);
+
   // Localization
   const { t } = useTranslation();
 
@@ -78,8 +75,9 @@ function IndexPage() {
         <Row className="ml-0 mr-0 pl-0 pr-0">
           <Col className="ml-0 mr-0 pl-0 pr-0" xs={3}>
             <ElementsArea
+              elements={elements}
               selectedElementIndex={selectedElementIndex}
-              SetElements={SetElements}
+              setElements={setElements}
               setSelectedElementIndex={setSelectedElementIndex}
             />
           </Col>
@@ -88,7 +86,6 @@ function IndexPage() {
               elements={elements}
               selectedElementIndex={selectedElementIndex}
               setSelectedElementIndex={setSelectedElementIndex}
-              SetElements={SetElements}
             />
           </Col>
         </Row>

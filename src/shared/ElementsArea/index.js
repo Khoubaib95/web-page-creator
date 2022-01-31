@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import './index.scss';
 
 function ElementsArea({
-  SetElements,
+  elements,
+  setElements,
   selectedElementIndex,
   setSelectedElementIndex,
 }) {
@@ -29,17 +30,33 @@ function ElementsArea({
     md: 0,
     lg: 0,
   });
-  useEffect(() => {}, [selectedElementIndex]);
+  useEffect(() => {
+    if (
+      selectedElementIndex.index !== -1 &&
+      selectedElementIndex.rowNumber !== -1
+    ) {
+      setBreakpoints(
+        elements[selectedElementIndex.rowNumber].content[
+          selectedElementIndex.index
+        ].breakpoints,
+      );
+      setOffset(
+        elements[selectedElementIndex.rowNumber].content[
+          selectedElementIndex.index
+        ].offset,
+      );
+    }
+  }, [selectedElementIndex]);
   // eslint-disable-next-line consistent-return
   function addElements(type, element) {
     switch (type) {
       case 'ROW':
-        SetElements((prev) => {
+        setElements((prev) => {
           return [...prev, { rowLength: 0, content: [] }];
         });
         break;
       case 'COL':
-        SetElements((prev) => {
+        setElements((prev) => {
           const elmts = [...prev];
           const newElement = element;
           if (
@@ -47,10 +64,14 @@ function ElementsArea({
             selectedElementIndex.rowNumber !== -1
           ) {
             const currentElement = elmts[selectedElementIndex.rowNumber];
-            currentElement.content[selectedElementIndex.index] = element;
             newElement.coordinates = {
               index: selectedElementIndex.index,
               rowNumber: selectedElementIndex.rowNumber,
+            };
+            currentElement.content[selectedElementIndex.index] = {
+              ...newElement,
+              element:
+                currentElement.content[selectedElementIndex.index].element,
             };
           } else {
             const lastElm = elmts[elmts.length - 1];
@@ -65,7 +86,7 @@ function ElementsArea({
         });
         break;
       case 'TEXT':
-        SetElements((prev) => {
+        setElements((prev) => {
           const elmts = [...prev];
           const newEl = {
             type: 'TEXT',
@@ -86,7 +107,7 @@ function ElementsArea({
         });
         break;
       case 'IMG':
-        SetElements((prev) => {
+        setElements((prev) => {
           const elmts = [...prev];
           const newEl = {
             type: 'IMG',
@@ -152,6 +173,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setBreakpoints((prev) => ({ ...prev, xs: +e.target.value }))
                   }
+                  value={breakpoints.xs}
                   placeholder="xs default value 3"
                   type="number"
                 />
@@ -159,6 +181,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setBreakpoints((prev) => ({ ...prev, sm: +e.target.value }))
                   }
+                  value={breakpoints.sm}
                   placeholder="sm default value 3"
                   type="number"
                 />
@@ -166,6 +189,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setBreakpoints((prev) => ({ ...prev, md: +e.target.value }))
                   }
+                  value={breakpoints.md}
                   placeholder="md default value 3"
                   type="number"
                 />
@@ -173,6 +197,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setBreakpoints((prev) => ({ ...prev, lg: +e.target.value }))
                   }
+                  value={breakpoints.lg}
                   placeholder="lg default value 3"
                   type="number"
                 />
@@ -198,6 +223,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setOffset((prev) => ({ ...prev, xs: +e.target.value }))
                   }
+                  value={offset.xs}
                   placeholder="xs default value 0"
                   type="number"
                 />
@@ -205,6 +231,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setOffset((prev) => ({ ...prev, sm: +e.target.value }))
                   }
+                  value={offset.sm}
                   placeholder="sm default value 0"
                   type="number"
                 />
@@ -212,6 +239,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setOffset((prev) => ({ ...prev, md: +e.target.value }))
                   }
+                  value={offset.md}
                   placeholder="md default value 0"
                   type="number"
                 />
@@ -219,6 +247,7 @@ function ElementsArea({
                   onChange={(e) =>
                     setOffset((prev) => ({ ...prev, lg: +e.target.value }))
                   }
+                  value={offset.lg}
                   placeholder="lg default value 0"
                   type="number"
                 />
@@ -233,10 +262,6 @@ function ElementsArea({
                     span: 0,
                     offset,
                     breakpoints,
-                    element: {
-                      type: 'COL',
-                      content: '',
-                    },
                   });
                 }}
                 type="button"
@@ -330,13 +355,15 @@ function ElementsArea({
 export default ElementsArea;
 
 ElementsArea.propTypes = {
-  SetElements: PropTypes.objectOf(PropTypes.any),
+  elements: PropTypes.objectOf(PropTypes.any),
+  setElements: PropTypes.objectOf(PropTypes.any),
   selectedElementIndex: PropTypes.objectOf(PropTypes.any),
   setSelectedElementIndex: PropTypes.func,
 };
 
 ElementsArea.defaultProps = {
-  SetElements: {},
+  elements: {},
+  setElements: {},
   selectedElementIndex: {},
   setSelectedElementIndex: () => {},
 };
